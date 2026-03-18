@@ -70,6 +70,9 @@ bathrooms = st.slider(
     1, 5, 2
 )
 
+# Option to show USD also
+show_usd = st.checkbox("Show price in USD also")
+
 predict_button = st.button("Predict Price")
 
 st.markdown('</div>', unsafe_allow_html=True)
@@ -81,10 +84,22 @@ if predict_button:
 
     prediction = model.predict(features)
 
-    st.markdown(
-        f'<p class="result">Predicted House Price: ${prediction[0]:,.2f}</p>',
-        unsafe_allow_html=True
-    )
+    # USD → INR Conversion
+    usd_to_inr = 83  # you can update this anytime
+    price_usd = prediction[0]
+    price_inr = price_usd * usd_to_inr
+
+    # Display Result
+    if show_usd:
+        st.markdown(
+            f'<p class="result">💰 Price: ₹{price_inr:,.2f} <br> (${price_usd:,.2f})</p>',
+            unsafe_allow_html=True
+        )
+    else:
+        st.markdown(
+            f'<p class="result">💰 Predicted House Price: ₹{price_inr:,.2f}</p>',
+            unsafe_allow_html=True
+        )
 
 # Footer
 st.markdown(
